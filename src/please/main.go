@@ -7,22 +7,26 @@ import (
 )
 
 type PleaseData struct {
+	Title string `yaml:"title"`
+	Author string `yaml:"author"`
+	Sort string `yaml:"sort"`
 	Playlist []string `yaml:"playlist"`
 }
 
 func main() {
-	pls := PleaseData{}
-	args := os.Args[1:]
+	var pls = PleaseData{}
+	var args = os.Args[1:]
 	if len(args) < 1 {
 		panic("please pass a file path to load")
 	}
-	path := args[0]
-	dat, err := os.ReadFile(path)
-	if err != nil {
+	var path = args[0]
+	var dat, fileErr = os.ReadFile(path)
+	if fileErr != nil {
 		panic(fmt.Sprintf("could not access file at path `%s`\n", path))
 	}
-	if err := yaml.Unmarshal([]byte(dat), &pls); err != nil {
-		panic(fmt.Sprintf("encountered a problem when loading the playlist file:\n%v\n", err))
+	var yamlErr = yaml.Unmarshal([]byte(dat), &pls)
+	if yamlErr != nil {
+		panic(fmt.Sprintf("encountered a problem when loading the playlist file:\n%v\n", yamlErr))
 	}
 	fmt.Printf("%+v\n", pls)
 }
